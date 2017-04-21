@@ -215,7 +215,7 @@
   }
 
   function loading() {
-    var j = 0, deckSize = total - skips.length, temp, k;
+    var j = 0, deckSize = total - skips.length, temp;
     var deck = new Array(deckSize);
     var index = 0;
     for (i = 0; i < total; i++) {
@@ -235,12 +235,11 @@
     }
 
     //shuffle the array
-    for( i = 0,temp,j,k; i < deckSize ; ++i) {
+    for( i = 0,temp,j; i < deckSize ; ++i) {
 　    j = Math.floor((Math.random() * deckSize));
-　    k = Math.floor((Math.random() * deckSize));
 　    temp = deck[j];
-　    deck[j] = deck[k];
-　    deck[k] = temp;
+　    deck[j] = deck[i];
+　    deck[i] = temp;
 　  }
     
     var spans = $("span[name=seat]").toArray();
