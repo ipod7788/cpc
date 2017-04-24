@@ -237,11 +237,12 @@
     //shuffle the array
     for( i = 0,temp,j; i < deckSize ; ++i) {
 　    j = Math.floor((Math.random() * deckSize));
-　    temp = deck[j];
-　    deck[j] = deck[i];
-　    deck[i] = temp;
+　    swap(deck, i, j);
 　  }
     
+    //check rule
+    checkRule(deck);
+
     var spans = $("span[name=seat]").toArray();
     for(i=0;i<deck.length;i++) {
       var span = spans[i];
@@ -258,6 +259,42 @@
       $(span).addClass(className);
     }
 
+  }
+
+  function checkRule(array) {
+    for( i = 1; i < array.length ; i = i+2) {
+      var cpc1 = array[i];
+      var cpc2 = array[i-1];
+      if(cpc1.sex == 1 && cpc2.sex == 1) {
+          modifyArray(i, array)
+      }
+　  }// for
+  }
+
+  function modifyArray(index, array){
+    var flag = true;
+    while (flag) {
+      var j = Math.floor((Math.random() * (array.length-1)));
+      if(array[j].sex == 0) {
+        if(j%2 == 0){
+          if(array[j+1].sex == 0){
+            swap(array, j, index);
+            flag = false;
+          }
+        } else {
+          if(array[j-1].sex == 0){
+            swap(array, j, index);
+            flag = false;
+          }
+        }//else
+      }
+    } // end while
+  }
+
+  function swap(array, i, j) {
+      var temp = array[j];
+　    array[j] = array[i];
+　    array[i] = temp;
   }
 
   function inArray(array, string) {
