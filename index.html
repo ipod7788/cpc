@@ -69,21 +69,19 @@
        
 		      <!-- /.jumbotron -->
         <div id="tableSeat" class="panel panel-default">
-          <div class="panel-heading lead"><b><span id="days" class="text-muted"></span></b></div>
+          <div class="panel-heading lead">CPC Random Seat</div>
           <div class="panel-body">
           <div class="media">
-          <div class="media-left media-middle">
-            <a href="https://new.cpc.com.tw/Home/" target="_new">
-              <img class="img-circle" src="images/cpc.png" alt="cpc" width="128" height="128">
-            </a>
-          </div>
-          <div class="media-body text-left">
-            <h4 class="media-heading">CPC Random Seat</h4>
-           
-              <button type="button" id="clearButton" class="btn btn-danger">Clear</button>
-              <button type="button" id="randomButton" class="btn btn-primary">Random Seat</button>
-         
-          </div>
+              <div class="media-left media-middle">
+                <a href="https://new.cpc.com.tw/Home/" target="_new">
+                  <img class="img-circle" src="images/cpc.png" alt="cpc" width="128" height="128">
+                </a>
+              </div>
+              <div class="media-body text-left">
+                <h3 class="media-heading"><span id="days" class="text-muted"></span></h3>              
+                  <button type="button" id="clearButton" class="btn btn-danger">Clear</button>
+                  <button type="button" id="randomButton" class="btn btn-primary">Random Seat</button>                            
+              </div>
         </div>
 
            <div class="clearfix"></div>
@@ -167,6 +165,7 @@
   <script src="js/bootstrap.js"></script>
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <script src="js/ie10-viewport-bug-workaround.js"></script>
+  <script src="js/index.js"></script>
   <script src="js/moment.min.js"></script>  
 
 <script>
@@ -175,6 +174,8 @@
   var skips = [44,45];
   var female = [1,3,5,6,15,16,24,27,28,36,37,38,44,45,52,55,62];
   var total = 65;
+  var deckSize = total - skips.length;
+  var target, hunter;
   $('.navbar-collapse li a').click(function(event) {
       event.preventDefault();
       $($(this).attr('href'))[0].scrollIntoView();
@@ -215,7 +216,38 @@
   }
 
   function loading() {
-    var j = 0, deckSize = total - skips.length, temp;
+    
+    var deck, pRule;
+  
+    do{
+      deck = shuffleArray();
+      womenRule(deck);
+      findTarget(deck);
+      pRule = privateRule(deck, target, hunter);
+    } while(!checkWomenRule(deck) || !pRule);
+
+    var spans = $("span[name=seat]").toArray();
+    for(i=0;i<deck.length;i++) {
+      var span = spans[i];
+      var cpc = deck[i];     
+      //span.innerText   = cpc.cid;
+      var className = "label-primary";
+      if(cpc.sex == 1 ) {
+        className = "label-danger";
+      }
+      
+      //$(span).html( "<p>" + cpc.cid+ "</p>" );
+      span.innerHTML = cpc.cid;
+      $(span).addClass(className);
+    }
+
+  }
+  
+  
+
+
+  function shuffleArray(){
+    var j = 0, temp;
     var deck = new Array(deckSize);
     var index = 0;
     for (i = 0; i < total; i++) {
@@ -240,62 +272,10 @@
 　    swap(deck, i, j);
 　  }
     
-    //check rule
-    checkRule(deck);
-
-    var spans = $("span[name=seat]").toArray();
-    for(i=0;i<deck.length;i++) {
-      var span = spans[i];
-      var cpc = deck[i];
-      //console.log(cpc.cid + "\t" + cpc.sex);
-      //span.innerText   = cpc.cid;
-      var className = "label-primary";
-      if(cpc.sex == 1 ) {
-        className = "label-danger";
-      }
-      
-      //$(span).html( "<p>" + cpc.cid+ "</p>" );
-      span.innerHTML = cpc.cid;
-      $(span).addClass(className);
-    }
-
+    return deck;
   }
 
-  function checkRule(array) {
-    for( i = 1; i < array.length ; i = i+2) {
-      var cpc1 = array[i];
-      var cpc2 = array[i-1];
-      if(cpc1.sex == 1 && cpc2.sex == 1) {
-          modifyArray(i, array)
-      }
-　  }// for
-  }
-
-  function modifyArray(index, array){
-    var flag = true;
-    while (flag) {
-      var j = Math.floor((Math.random() * (array.length-1)));
-      if(array[j].sex == 0) {
-        if(j%2 == 0){
-          if(array[j+1].sex == 0){
-            swap(array, j, index);
-            flag = false;
-          }
-        } else {
-          if(array[j-1].sex == 0){
-            swap(array, j, index);
-            flag = false;
-          }
-        }//else
-      }
-    } // end while
-  }
-
-  function swap(array, i, j) {
-      var temp = array[j];
-　    array[j] = array[i];
-　    array[i] = temp;
-  }
+  
 
   function inArray(array, string) {
 
