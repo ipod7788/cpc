@@ -222,9 +222,9 @@
     do{
       deck = shuffleArray();
       womenRule(deck);
-      findTarget(deck);
-      pRule = privateRule(deck, target, hunter);
-    } while(!checkWomenRule(deck) || !pRule);
+      //findTarget(deck);
+      //pRule = privateRule(deck, target, hunter);
+    } while(!checkWomenRule(deck) /*|| !pRule*/);
 
     var spans = $("span[name=seat]").toArray();
     for(i=0;i<deck.length;i++) {
