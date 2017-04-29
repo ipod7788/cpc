@@ -165,7 +165,7 @@
   <script src="js/bootstrap.js"></script>
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <script src="js/ie10-viewport-bug-workaround.js"></script>
-  <script src="js/index.js"></script>
+  <script src="js/index2.js"></script>
   <script src="js/moment.min.js"></script>  
 
 <script>
@@ -175,7 +175,8 @@
   var female = [1,3,5,6,15,16,24,27,28,36,37,38,44,45,52,55,62];
   var total = 65, column = 12;
   var deckSize = total - skips.length;
-  var target, hunter;
+  var target = 9 ;
+  var rw = new Array(9);
   $('.navbar-collapse li a').click(function(event) {
       event.preventDefault();
       $($(this).attr('href'))[0].scrollIntoView();
@@ -218,11 +219,12 @@
   function loading() {
     
     var deck, pRule;
-  
-    do{
-      deck = shuffleArray();
-      womenRule(deck);    
-    } while(!checkWomenRule(deck));
+
+    deck = shuffleArray();
+    getRW();
+    relocateRW(deck, rw);
+    privateRule(deck, rw);
+    
 
     var spans = $("span[name=seat]").toArray();
     for(i=0;i<deck.length;i++) {
@@ -263,17 +265,37 @@
         deck[index] = new learner(cid, sex);
         index ++;
     }
-
-    //shuffle the array
-    for( i = 0,temp,j; i < deckSize ; ++i) {
+  
+    //shuffle the array 
+	for( i = 0,temp,j; i < deckSize ; ++i) {
 　    j = Math.floor((Math.random() * deckSize));
 　    swap(deck, i, j);
 　  }
-    
+
     return deck;
   }
 
-  
+  function getRW() {
+  	var af = new Array(); //actual women
+  	var index = 0;
+  	for (i = 0; i < female.length; i++) {
+       	var cid = female[i];
+        if(inArray(skips, cid)) {
+          //skip learner
+          continue;
+        } 
+        af[index] = new learner(cid, 1);
+        index ++;
+    }// for
+    var totalSize = af.length;
+    //get random women
+    for( i = 0; i < rw.length ; ++i) {
+　    var j = Math.floor((Math.random() * totalSize));
+	  rw[i] = af[j];
+　    af[j] = af[--totalSize];
+　  }
+
+  }
 
   function inArray(array, string) {
 
@@ -284,6 +306,8 @@
   function learner(cid, sex) {
     this.cid = cid;
     this.sex = sex; // 0 : men ,1 : female
+    this.cIndex = -1;
+    this.disable = 0;
   }
 
 </script>
