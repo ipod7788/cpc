@@ -3,7 +3,7 @@ function findTarget(array){
       var cpc = array[i];
       if(cpc.cid == 13) 
           hunter = i;
-      if (cpc.cid == 27)
+      if (cpc.cid == 52)
           target = i;
 　  }// for
   }
@@ -15,24 +15,24 @@ function findTarget(array){
       loop:
         while(true){
           if(next == left){
-            if((hunter%12) > 0){
+            if((hunter%column) > 0){
               swap(array, target, hunter-1);       
               return true;
             } 
           } else if (next == right) {
-            if(hunter%12 < 11 && (hunter+1) < deckSize) {
+            if(hunter%column < (column-1) && (hunter+1) < deckSize) {
               swap(array, target, hunter+1);         
               return true;
             }
           } else if (next == up) {
-            if(Math.floor(hunter/12) > 0) {
-              swap(array, target, hunter -12);
+            if(Math.floor(hunter/column) > 0) {
+              swap(array, target, hunter -column);
               return true;
             }
           } else {
             //down
-            if((hunter/12) < Math.ceil(parseFloat(deckSize)/12) && hunter +12 < deckSize) {
-              swap(array, target, hunter +12); 
+            if((hunter/column) < Math.ceil(parseFloat(deckSize)/column) && (hunter +column) < deckSize) {
+              swap(array, target, hunter +column); 
               return true;
               //break loop;
             }
