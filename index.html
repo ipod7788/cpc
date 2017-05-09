@@ -177,6 +177,7 @@
   var total = 65, column = 10;
   var deckSize = total - skips.length;
   var target, hunter;
+  var goals = [13,52,11,49];
   $('.navbar-collapse li a').click(function(event) {
       event.preventDefault();
       $($(this).attr('href'))[0].scrollIntoView();
@@ -223,8 +224,10 @@
     do{
       deck = shuffleArray();
       womenRule(deck);
-      findTarget(deck);
-      privateRule(deck, target, hunter);   
+      findTarget(deck,goals[0], goals[1]);
+      privateRule(deck, target, hunter);
+      findTarget(deck,goals[2], goals[3]);
+      privateRule(deck, target, hunter);  
     } while(!checkWomenRule(deck));
 
     var spans = $("span[name=seat]").toArray();

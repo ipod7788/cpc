@@ -1,9 +1,9 @@
-function findTarget(array){
+function findTarget(array, x, y){
     for( i = 0; i < array.length ; i++) {
       var cpc = array[i];
-      if(cpc.cid == 13) 
+      if(cpc.cid == x) 
           hunter = i;
-      if (cpc.cid == 52)
+      if (cpc.cid == y)
           target = i;
 　  }// for
   }
